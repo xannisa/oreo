@@ -1,0 +1,9 @@
+*.log
+.env
+node_modules/
+vendor/
+*.pem
+*.key
+__pycache__/
+.github
+.github/*
