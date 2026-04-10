@@ -1,0 +1,33 @@
+- name: Deploy Docker Compose App
+  hosts: webserver
+  become: yes
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+
+    - name: Start and enable Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Create app directory
+      file:
+        path: /home/ubuntu/app
+        state: directory
+
+    - name: Copy Docker Compose file
+      copy:
+        src: docker-compose.yml
+        dest: /home/ubuntu/app/docker-compose.yml
+
+    - name: Force update Docker Compose (recreate containers)
+      command: docker compose up -d --force-recreate
+      args:
+        chdir: /home/ubuntu/app

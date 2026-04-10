@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  web:
+    image: nisahello/nginx-php:latest
+    container_name: nginx_php_app
+    ports:
+      - "8080:80"
+    volumes:
+      - ./index.php:/var/www/localhost/htdocs/index.php
