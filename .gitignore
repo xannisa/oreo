@@ -5,5 +5,4 @@ vendor/
 *.pem
 *.key
 __pycache__/
-.github
-.github/*
+.git
