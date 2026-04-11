@@ -27,21 +27,23 @@ docker compose file will run the base image as a container running on docker pla
 
 ## 🧱 Run Docker Task
 
-To create a base image use this command :
-bash```
+**Attention**
+Since this task require to push to our own docker hub, then we have to have an account on *https://hub.docker.com*
+
+And ensure our docker is installed and running.
+
+### ⚙️ 1. Create base image
+
+To create a base image :
+``` bash
 docker build -t dockerusername/docker:v1 .
 ```
+Login to docker hub :
+``` bash
+docker login
+```
 
-# 🐳 Nginx + PHP 8.2 Docker Setup (Alpine)
-
-## 📖 Description
-This project demonstrates how to:
-- Build a Docker image using Alpine Linux
-- Install Nginx and PHP 8.2
-- Push the image to Docker Hub (private repository)
-- Run the container using Docker Compose
-- Serve a simple PHP application
-
----
-
-## 📁 Project Structure
+Push the base image to docker hub :
+``` bash
+docker push dockerusername/docker:v1
+```
