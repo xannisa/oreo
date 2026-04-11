@@ -55,3 +55,7 @@ docker push dockerusername/docker:v1
 ``` bash
 docker compose -d up
 ```
+
+## 🕯️ Test the docker application
+
+Open your browser, the access ***localhost***
