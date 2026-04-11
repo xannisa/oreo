@@ -32,7 +32,7 @@ Since this task require to push to our own docker hub, then we have to have an a
 
 And ensure our docker is installed and running.
 
-### ⚙️ 1. Create base image
+### ⚙️ 1. Create base image and push to docker hub
 
 To create a base image :
 ``` bash
@@ -46,4 +46,12 @@ docker login
 Push the base image to docker hub :
 ``` bash
 docker push dockerusername/docker:v1
+```
+
+### ⚙️ 2. Run the image to be a running container and use the image from docker hub registry
+
+*Since this container is running on the same machine with build the image, so the command will use the image on local instead.*
+
+``` bash
+docker compose -d up
 ```
