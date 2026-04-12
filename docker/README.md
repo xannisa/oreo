@@ -50,7 +50,7 @@ Push the base image to docker hub :
 docker push <dockerhubusername>/docker:latest
 ```
 
-*Note : Replace <dockerhubusername> with your own*
+*Note : Replace *<dockerhubusername>* with your own*
 
 ### ⚙️ 2. Run the image to be a running container and use the image from docker hub registry
 
@@ -60,11 +60,11 @@ docker push <dockerhubusername>/docker:latest
 docker compose -d up
 ```
 
-## 🕯️ Test the docker application
+### 🕯️ Test the docker application
 
 Open your browser, the access ***localhost:8080***
 
-## 🚀 Destroy docker
+### 🚀 Destroy docker
 
 Push the base image to docker hub :
 ``` bash
