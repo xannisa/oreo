@@ -7,12 +7,10 @@ on:
       - 'docker-compose.yaml'
 
 jobs:
-
-  # 🏗️ BUILD JOB (only runs when Dockerfile changes)
   build:
     runs-on: ubuntu-latest
-    if: contains(join(github.event.commits.*.modified, ','), 'Dockerfile')
-
+    # This job ONLY runs if the Dockerfile was changed
+    if: contains(join(github.event.commits.*.added, ','), 'Dockerfile') || contains(join(github.event.commits.*.modified, ','), 'Dockerfile')
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,17 +18,17 @@ jobs:
       - name: Build Docker Image
         run: docker build -t my-image .
 
-  # 🚀 DEPLOY JOB (runs when either file changes)
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    # This job runs if build succeeds OR if build was skipped
     if: |
-      contains(join(github.event.commits.*.modified, ','), 'Dockerfile') ||
-      contains(join(github.event.commits.*.modified, ','), 'docker-compose.yaml')
-
+      always() && 
+      (contains(join(github.event.commits.*.modified, ','), 'Dockerfile') || 
+       contains(join(github.event.commits.*.modified, ','), 'docker-compose.yaml'))
+    needs: [build]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy (example)
+      - name: Deploy
         run: docker compose up -d
