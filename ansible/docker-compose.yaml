@@ -13,7 +13,7 @@ services:
       - php
 
   php:
-    image: nisahello/php-fpm:1.0
+    image: nisahello/php-fpm:latest
     container_name: php-fpm
     volumes:
       - ./php-app:/var/www/html
