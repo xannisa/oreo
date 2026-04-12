@@ -25,6 +25,19 @@ Ansible (>= 2.9)
 SSH access to target server
 Docker installed to target server
 
+In file inventory.ini. Please replace with your ssh target server credentials. Place the private key on .ssh/id_rsa.pub
+
+``` bash
+[app_servers]
+myserver ansible_host=<ip>
+
+# Example. Replace with your own
+[app_servers:vars]
+ansible_user=<username>
+ansible_ssh_private_key_file=<.ssh/id_rsa>
+ansible_python_interpreter=/usr/bin/python3
+```
+
 ## 🧱 Run Ansible Task
 
 Run the deployment with:
