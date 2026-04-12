@@ -6,3 +6,6 @@ vendor/
 *.key
 __pycache__/
 .git
+.ssh/
+.ssh/*
+config
