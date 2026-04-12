@@ -32,4 +32,39 @@ Access on github **https://github.com/xannisa/oreo/tree/main**
 
 This task is run automatically when `Dockerfile` and `docker-compose.yaml` is changed. The result will be found in action tab.
 
+# QUIZ
+
+After we do some adjustments in our .gitlab-ci.yml, our Gitlab CI doesn't work. We need your help to fix this .gitlab-ci.yml
+
+``` bash 
+stages:
+    - unittest
+    -security-scan
+security_scan:
+    stage: security-scan
+    script:
+        - trivy repo ./
+```
+# Answer
+
+In that code there are several wrong code, there are :
+### Indentation
+-security-scan : no space. Should be - security-scan
+
+### Misplaced script block
+script: is not indented under the job
+
+### Broken job sctructure
+The job structure should be :
+``` bash
+stages:
+  - unittest
+  - security-scan
+
+security_scan:
+  stage: security-scan
+  script:
+    - trivy repo ./
+```
+
 
