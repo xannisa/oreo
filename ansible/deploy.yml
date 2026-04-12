@@ -1,0 +1,28 @@
+# deploy.yml
+- name: Deploy Docker Compose Application
+  hosts: app_servers
+  become: true
+
+  vars:
+    app_dir: /opt/myapp
+
+  tasks:
+    - name: Ensure project directory exists
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+
+    - name: Copy docker-compose file
+      copy:
+        src: docker-compose.yml
+        dest: "{{ app_dir }}/docker-compose.yml"
+
+    - name: Pull latest Docker images
+      command: docker compose pull
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Force recreate containers (update)
+      command: docker compose up -d --force-recreate --remove-orphans
+      args:
+        chdir: "{{ app_dir }}"

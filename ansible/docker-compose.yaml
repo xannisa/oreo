@@ -1,7 +1,19 @@
 version: '3.8'
 
 services:
-  web:
-    image: nisahello/nginx-php:latest
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-server
     ports:
       - "8080:80"
+    volumes:
+      - ./php-app:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - php
+
+  php:
+    image: nisahello/php-fpm:1.0
+    container_name: php-fpm
+    volumes:
+      - ./php-app:/var/www/html
