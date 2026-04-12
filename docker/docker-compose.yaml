@@ -1,25 +1,19 @@
 version: '3.8'
 
-networks:
-  web-network:
-    driver: bridge  
-
 services:
-  web:
-    image: nisahello/docker:v1
-    container_name: php-web-server
-    volumes:
-      - ./index.php:/var/www/localhost/htdocs/index.php
-    networks:
-      - web-network
-  
   nginx:
-    image: nisahello/docker:v1
+    image: nginx:alpine
+    container_name: nginx-server
     ports:
-      - "80:80"
-    networks:
-      - web-network
+      - "8080:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./php-app:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - web
+      - php
+
+  php:
+    image: nisahello/php-fpm:1.0
+    container_name: php-fpm
+    volumes:
+      - ./php-app:/var/www/html

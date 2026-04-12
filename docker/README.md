@@ -36,7 +36,7 @@ And ensure our docker is installed and running.
 
 To create a base image :
 ``` bash
-docker build -t dockerusername/docker:v1 .
+docker build -t dockerusername/docker:latest .
 ```
 Login to docker hub :
 ``` bash
@@ -45,7 +45,7 @@ docker login
 
 Push the base image to docker hub :
 ``` bash
-docker push dockerusername/docker:v1
+docker push dockerusername/docker:latest
 ```
 
 ### ⚙️ 2. Run the image to be a running container and use the image from docker hub registry
