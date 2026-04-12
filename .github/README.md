@@ -32,7 +32,7 @@ Access on github **https://github.com/xannisa/oreo/tree/main**
 
 This task is run automatically when `Dockerfile` and `docker-compose.yaml` is changed. The result will be found in action tab.
 
-# QUIZ
+## 📄📄📄 QUIZ
 
 After we do some adjustments in our .gitlab-ci.yml, our Gitlab CI doesn't work. We need your help to fix this .gitlab-ci.yml
 
@@ -45,7 +45,7 @@ security_scan:
     script:
         - trivy repo ./
 ```
-# Answer
+## 📄📄📄 Answer
 
 In that code there are several wrong code, there are :
 ### Indentation
