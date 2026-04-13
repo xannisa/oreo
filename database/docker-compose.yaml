@@ -1,40 +1,23 @@
 version: '3.8'
 
 services:
-  nginx:
-    image: nginx:alpine
-    container_name: nginx-server
-    ports:
-      - "8080:80"
-    volumes:
-      - ./php-app:/var/www/html
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - php
-
-  php:
-    image: nisahello/php-fpm:latest
-    container_name: php-fpm
-    volumes:
-      - ./php-app:/var/www/html
-    depends_on:
-      - postgres
-
   postgres:
     image: postgres:16
     container_name: postgres-db
     environment:
-      POSTGRES_DB: sre
-      POSTGRES_USER: admin_user
-      POSTGRES_PASSWORD: admin_password
+      # Initial Admin/Full Access User
+      - POSTGRES_DB=sre
+      - POSTGRES_USER=admin_user
+      - POSTGRES_PASSWORD=admin_password
     ports:
-      - "5432:5432"
+      - "5432:5432" # Mapping PostgreSQL port to host
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d # Script to create users
+      - ./init-db:/docker-entrypoint-initdb.d # Location for user/DB setup script
     command: >
       postgres 
-      -c max_connections=500
+      -c max_connections=500 
+      -c shared_buffers=256MB
 
 volumes:
   postgres_data:
