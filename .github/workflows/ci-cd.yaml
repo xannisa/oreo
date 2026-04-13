@@ -17,8 +17,8 @@ jobs:
       dockerfile_changed: ${{ steps.filter.outputs.dockerfile }}
       compose_changed: ${{ steps.filter.outputs.compose }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v3
+      - uses: actions/checkout@v6
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -32,7 +32,7 @@ jobs:
     if: needs.check_changes.outputs.dockerfile_changed == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build Docker Image
         run: docker build -t my-image .
 
@@ -44,6 +44,6 @@ jobs:
       (needs.check_changes.outputs.dockerfile_changed == 'true' || needs.check_changes.outputs.compose_changed == 'true')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Deploy
         run: docker compose up -d
