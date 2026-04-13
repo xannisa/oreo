@@ -3,32 +3,49 @@ name: CI/CD Pipeline
 on:
   push:
     paths:
-      - 'Dockerfile'
-      - 'docker-compose.yaml'
+      - '**/Dockerfile*'
+      - '**/docker-compose.yaml'
 
 jobs:
-  build:
+  # PRE-CHECK: This job detects what actually changed
+  check_changes:
     runs-on: ubuntu-latest
-    # This job ONLY runs if the Dockerfile was changed
-    if: contains(join(github.event.commits.*.added, ','), 'Dockerfile') || contains(join(github.event.commits.*.modified, ','), 'Dockerfile')
+    outputs:
+      dockerfile_changed: ${{ steps.filter.outputs.dockerfile }}
+      compose_changed: ${{ steps.filter.outputs.compose }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            dockerfile:
+              - '**/Dockerfile*'
+            compose:
+              - '**/docker-compose.yaml'
 
+  # BUILD: Only runs if Dockerfile changed
+  build:
+    needs: check_changes
+    if: needs.check_changes.outputs.dockerfile_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - name: Build Docker Image
         run: docker build -t my-image .
 
+  # DEPLOY: Runs if Dockerfile OR Compose changed
   deploy:
-    runs-on: ubuntu-latest
-    # This job runs if build succeeds OR if build was skipped
+    needs: [check_changes, build]
+    # The 'if' logic:
+    # 1. Success if: Build finished OR Build was skipped because no Dockerfile change
+    # 2. AND: Something relevant changed (Dockerfile or Compose)
     if: |
-      always() && 
-      (contains(join(github.event.commits.*.modified, ','), 'Dockerfile') || 
-       contains(join(github.event.commits.*.modified, ','), 'docker-compose.yaml'))
-    needs: [build]
+      always() &&
+      (needs.build.result == 'success' || needs.build.result == 'skipped') &&
+      (needs.check_changes.outputs.dockerfile_changed == 'true' || needs.check_changes.outputs.compose_changed == 'true')
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Deploy
         run: docker compose up -d
