@@ -6,8 +6,11 @@ on:
       - '**/Dockerfile*'
       - '**/docker-compose.yaml'
 
+# This line removes the warning message
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
-  # PRE-CHECK: This job detects what actually changed
   check_changes:
     runs-on: ubuntu-latest
     outputs:
@@ -24,7 +27,6 @@ jobs:
             compose:
               - '**/docker-compose.yaml'
 
-  # BUILD: Only runs if Dockerfile changed
   build:
     needs: check_changes
     if: needs.check_changes.outputs.dockerfile_changed == 'true'
@@ -34,12 +36,8 @@ jobs:
       - name: Build Docker Image
         run: docker build -t my-image .
 
-  # DEPLOY: Runs if Dockerfile OR Compose changed
   deploy:
     needs: [check_changes, build]
-    # The 'if' logic:
-    # 1. Success if: Build finished OR Build was skipped because no Dockerfile change
-    # 2. AND: Something relevant changed (Dockerfile or Compose)
     if: |
       always() &&
       (needs.build.result == 'success' || needs.build.result == 'skipped') &&
